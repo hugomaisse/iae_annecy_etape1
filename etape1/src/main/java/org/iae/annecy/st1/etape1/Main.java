@@ -61,12 +61,11 @@ public class Main {
 		c.ajouterProduit(p1);
 		c.ajouterProduit(p2);
 
-		//affichageMenu();
 		Scanner sc = new Scanner(System.in);
 		int choixMenu = 0;
 		int choixQuit = 0;
 		String chProd = null;
-		//System.out.println(choix);
+	
 		
 		try {
 		  	 File fichier = new File ("catalogue");
@@ -77,27 +76,16 @@ public class Main {
 			c = new Catalogue();
 			c.ajouterProduit(p1);
 			c.ajouterProduit(p2);
-	    }/*catch(IOException i) {
-	         i.printStackTrace();
-	        c.ajouterProduit(p1);
-	 		c.ajouterProduit(p2);
-	 		 return;
-	      }catch(ClassNotFoundException e) {
-	         System.out.println("la classe Catalogue n'existe pas !!");
-	         e.printStackTrace();
-		     c.ajouterProduit(p1);
-		     c.ajouterProduit(p2);
-	         return;
-	      }*/
+	    }
 		
 		
 		do{
 			affichageMenu();
 			choixMenu = sc.nextInt();
-			while(choixMenu != 1 && choixMenu != 2 && choixMenu != 3){
-				System.out.println("erreur veuillez rentrer (1=modif/2=Afficher/3=ajouter)");
-				choixMenu = sc.nextInt();
-			}
+				while(choixMenu != 1 && choixMenu != 2 && choixMenu != 3){
+					System.out.println("erreur veuillez rentrer (1=modif/2=Afficher/3=ajouter)");
+					choixMenu = sc.nextInt();
+				}
 			if(choixMenu == 1){
 				
 				System.out.println("quel produit voulez vous modifier ? (référence produit)");
@@ -113,27 +101,24 @@ public class Main {
 				
 				
 				
-				System.out.println("quel attribut changer ?"+  "\n 1=description" + "\n 2=description longue" +"\n 3=prix"+"\n 4=nom");
+				System.out.println("quel attribut changer ?"+  "\n 1=description court" + "\n 2=description longue" +"\n 3=prix"+"\n 4=nom");
 				int chAtt = sc.nextInt();
-				while(chAtt != 1 && chAtt !=2 && chAtt != 3 && chAtt != 4){ 
-					System.out.println("erreur veuillez rentrer \n 1=description" + "\n 2=description longue" +"\n 3=prix"+"\n 4=nom");
-					chAtt = sc.nextInt();
-				}
-					/*if(chAtt == 1){
-						System.out.println("quelle est la nouvelle description ?");
-						c.getProduits().get(chProd-1).setDesc(sc.next());
-					}else{
-						System.out.println("quel est le prix ?");
-						c.getProduits().get(chProd-1).setPrix(sc.nextInt());
-					}*/
+					while(chAtt != 1 && chAtt !=2 && chAtt != 3 && chAtt != 4){ 
+						System.out.println("erreur veuillez rentrer \n 1=description" + "\n 2=description longue" +"\n 3=prix"+"\n 4=nom");
+						chAtt = sc.nextInt();
+					}
+				sc.nextLine();
 				switch(chAtt){
+				
 				case 1:
-					System.out.println("quelle est la nouvelle description ?");
+					
+					System.out.println("quelle est la nouvelle description courte ?");
 					c.retrouveProduit(chProd).setDesc(sc.nextLine());
-					sc.nextLine();
+					
 					
 				break;
 				case 2:
+					
 					System.out.println("quelle est la nouvelle description longue ?");
 					
 					c.retrouveProduit(chProd).setDescLong(sc.nextLine());
@@ -145,13 +130,13 @@ public class Main {
 				case 4:
 					System.out.println("quel est le nouveau nom ?");
 					c.retrouveProduit(chProd).setNom(sc.next());
-					
-					
-				}
-				}else if(choixMenu == 2){
-					CatalogueControler cat = new CatalogueControler(c);
-					System.out.println(cat.get());
-				//c.afficherList();
+				}	
+			
+				
+			}else if(choixMenu == 2){
+				CatalogueControler cat = new CatalogueControler(c);
+				System.out.println(cat.get());
+				
 				
 			}else{	
 				Scanner sc1 = new Scanner(System.in);
@@ -159,10 +144,10 @@ public class Main {
 				String nom = sc1.next();
 				System.out.println("\t\t Quelle est la reférence ?");
 				String ref = sc1.next();
-				while(ref.equals(c.retrouveProduit(ref).getRef())){
-					System.out.println("\t\t la reférence est déja utilisée, rentrez une nouvelle reférence");
-					ref = sc1.next();
-				}
+					while(ref.equals(c.retrouveProduit(ref).getRef())){
+						System.out.println("\t\t la reférence est déja utilisée, rentrez une nouvelle reférence");
+						ref = sc1.next();
+					}
 				System.out.println("\t\t Quelle est la description courte ?");
 				String desc = sc1.nextLine();
 				sc1.nextLine();
@@ -170,31 +155,33 @@ public class Main {
 				String descLong = sc1.nextLine();
 				System.out.println("\t\t Quelle est le prix ?");
 				int prix = sc1.nextInt();
-				while(prix<= 0){
-				System.out.println("Le prix est négatif !");
-				prix = sc1.nextInt();
-				}
-				new Produit(nom,ref, desc,descLong, prix);
+					while(prix<= 0){
+						System.out.println("Le prix est négatif !");
+						prix = sc1.nextInt();
+					}
+				new Produit(nom,ref, desc, descLong, prix);
 				c.ajouterProduit(new Produit(nom,ref, desc,descLong, prix));
-				try{
-					File fichier = new File("catalogue");
-					ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fichier));
-					oos.writeObject(c);
-				}catch (IOException ioe){
-					ioe.printStackTrace();
-				}
+			
 					
 				CatalogueControler cat = new CatalogueControler(c);
 				System.out.println(cat.get());
-				
+			}	
 			
 			System.out.println("voulez-vous revenir au menu principal ? (1=oui/2=non)");
 			choixQuit = sc.nextInt();
-			while(choixQuit != 1 && choixQuit !=2){
-				System.out.println("erreur veuillez rentrer (1=oui/2=non)");
-				choixQuit = sc.nextInt();
+			try{
+				File fichier = new File("catalogue");
+				ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fichier));
+				oos.writeObject(c);
+			}catch (IOException ioe){
+				ioe.printStackTrace();
 			}
-			}
+			
+				while(choixQuit != 1 && choixQuit !=2){
+					System.out.println("erreur veuillez rentrer (1=oui/2=non)");
+					choixQuit = sc.nextInt();
+				}
+			
 		}while(choixQuit == 1);
 		}
 		
