@@ -138,6 +138,8 @@ public class Main {
 				System.out.println(cat.get());
 				
 				
+				
+				
 			}else{	
 				Scanner sc1 = new Scanner(System.in);
 				System.out.println("Quelle est le nom du produit ?");
