@@ -1,10 +1,5 @@
 package org.iae.annecy.st1.etape1.model.produit;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -25,6 +20,7 @@ public class Catalogue implements java.io.Serializable{
 	public void ajouterProduit(Produit p){
 	this.produits.add(p);
 	}
+	
 	public String afficherList(){
 		String t = "";
 		for (Produit produit : produits) {
@@ -33,6 +29,7 @@ public class Catalogue implements java.io.Serializable{
 		return t;
 	
 	}
+	
 	public Produit retrouveProduit(String reference){
 		Iterator<Produit> it = this.getProduits().iterator();
 		Produit prod = new Produit();
@@ -48,9 +45,3 @@ public class Catalogue implements java.io.Serializable{
 		return prod;
 	}
 }
-
-	
-
-
-	
-
