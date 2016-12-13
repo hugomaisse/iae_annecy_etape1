@@ -1,11 +1,13 @@
 package org.iae.annecy.st1.etape1.model.person;
 
+import java.io.Serializable;
+
 import org.iae.annecy.st1.common.mvc.AbstractDataView;
 import org.iae.annecy.st1.common.mvc.BasicDataView;
 import org.iae.annecy.st1.common.mvc.DataView;
 
-public class Person extends AbstractDataView {
-
+public class Person extends AbstractDataView implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String nom;
 	private String prenom;
@@ -58,6 +60,11 @@ public class Person extends AbstractDataView {
 
 	public void setPrenom(final String prenom) {
 		this.prenom = prenom;
+	}
+	public String afficherPerson(){
+		String t = "";
+		t += ("\n ***" + this.getId() +"***" + " \n nom: "  + this.getNom() + "\n Prénom : " + this.getPrenom() );
+		return t;
 	}
 
 }
