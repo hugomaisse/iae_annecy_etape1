@@ -81,7 +81,8 @@ public class Main {
 		clts.ajouterPerson(pers1);
 		//mise en place d'une interface pour responsable produit responsable client et clients
 		Scanner sc2 = new Scanner(System.in);
-
+		Scanner sc5 = new Scanner(System.in);
+		
 		int choixq;
 		do{
 			affichageMenuprincipal();
@@ -90,7 +91,6 @@ public class Main {
 			switch(choixusers){
 
 			case  1:
-
 				try {
 					File file = new File ("clients");
 					ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
@@ -100,22 +100,89 @@ public class Main {
 					clts = new Clients();
 					clts.ajouterPerson(pers1);
 				}
+				affichageresponsableclient();
+				int choixclt = sc5.nextInt();
+				switch(choixclt){
+				case 1 : 
+					try {
+						File file = new File ("clients");
+						ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+						clts = (Clients) ois.readObject();
+
+					}catch(FileNotFoundException e){
+						clts = new Clients();
+						clts.ajouterPerson(pers1);
+					}
 
 
-				Scanner sc3 = new Scanner(System.in);
-				ConsoleHelper.display("Quelle est l'ID du client ?");
-				int id = sc3.nextInt();
-				while(id == (clts.retrouvePerson(id).getId())){
-					ConsoleHelper.display("L'ID est déja utilisé, rentrez une nouvel ID");
-					id = sc3.nextInt();
+					Scanner sc3 = new Scanner(System.in);
+					ConsoleHelper.display("Quelle est l'ID du client ?");
+					int id = sc3.nextInt();
+					/*while(id == (clts.retrouvePerson(id).getId())){
+						ConsoleHelper.display("L'ID est déja utilisé, rentrez une nouvel ID");
+						id = sc3.nextInt();
+					}*/
+					ConsoleHelper.display("Quelle est le nom du client ?");
+					String nom1 = sc3.next();
+					ConsoleHelper.display("Quelle est le prénom du client ?");
+					String prénom = sc3.next();
+					new Person(id, nom1, prénom);
+					clts.ajouterPerson(new Person(id, nom1, prénom));
+
+					try{
+						File file = new File("clients");
+						ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+						oos.writeObject(clts);
+					}catch (IOException ioe){
+						ioe.printStackTrace();
+					}
+					clientsControler clt = new clientsControler(clts);
+					ConsoleHelper.display(clt.get());
+					break;
+					
+				case 2 : 
+					
+					ConsoleHelper.display("quel client voulez vous modifier ? (ID)");
+					clientsControler cl = new clientsControler(clts);
+					ConsoleHelper.display(cl.get());
+					/*while(chProd > c.getProduits().size()){
+				System.out.println("erreur veuillez rentrer un article valide dans la liste suivante :");
+				c.afficherList();*/
+					Scanner sc6 = new Scanner(System.in);
+					int chClient = sc6.nextInt();
+
+
+					/*while(!chClient.equals(clts.retrouvePerson(chClient).getId())) {
+						System.out.println("\t\t la reférence est inconnue, rentrez une nouvelle reférence");
+						chProd = sc.next();
+					}*/
+
+
+					ConsoleHelper.display("quel attribut changer ?"+  "\n 1=Nom" + "\n 2=Prénom");
+					int chAtts = sc6.nextInt();
+					while(chAtts != 1 && chAtts !=2){ 
+						ConsoleHelper.display("erreur veuillez rentrer \n 1=Nom" + "\n 2=Prénom");
+						chAtts = sc6.nextInt();
+					}
+					
+					switch(chAtts){
+					case 1:
+
+						System.out.println("quelle est le nouveau Nom ?");
+						clts.retrouvePerson(chClient).setNom(sc6.next());
+						break;
+					case 2:
+
+						System.out.println("quelle est le nouveau prénom ?");
+
+						clts.retrouvePerson(chClient).setPrenom(sc6.next());
+						break;
+					}
+				case 3 :
+					clientsControler client = new clientsControler(clts);
+					ConsoleHelper.display(client.get());
+				break ;
 				}
-				ConsoleHelper.display("Quelle est le nom du client ?");
-				String nom1 = sc3.next();
-				ConsoleHelper.display("Quelle est le prénom du client ?");
-				String prénom = sc3.next();
-				new Person(id, nom1, prénom);
-				clts.ajouterPerson(new Person(id, nom1, prénom));
-
 				try{
 					File file = new File("clients");
 					ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
@@ -123,9 +190,12 @@ public class Main {
 				}catch (IOException ioe){
 					ioe.printStackTrace();
 				}
-				clientsControler clt = new clientsControler(clts);
-				System.out.println(clt.get());
-
+				break;
+				
+				
+				
+				
+				
 
 
 
@@ -151,9 +221,9 @@ public class Main {
 				final StringView customerAddView = new PersonAddFrenchView();
 
 				ConsoleHelper.display(customerAddView.build(customerAddData));*/
-
-				break;
-
+				
+				
+				
 				//Demande l'ajout d'une personne en une seul fois
 				/*final ConsoleInputView customerCreateView = new PersonCreateFrenchView();
 		customerCreateView.ask(scan);
@@ -332,7 +402,13 @@ public class Main {
 
 	}
 
+	public static void affichageresponsableclient(){
+		ConsoleHelper.display("    *******Choix Responsable clts*******\n"
+				+ "1. Création client\n"
+				+ "2. Modification client	\n"
+				+ "3. Affichage clients");
 
+	}
 
 
 
