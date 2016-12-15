@@ -3,7 +3,7 @@
  */
 
 package org.iae.annecy.st1.etape1;
-
+import java.util.ArrayList;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -23,8 +24,10 @@ import org.iae.annecy.st1.common.mvc.DataView;
 import org.iae.annecy.st1.common.mvc.StringView;
 import org.iae.annecy.st1.etape1.controller.CatalogueControler;
 import org.iae.annecy.st1.etape1.controller.MainController;
+import org.iae.annecy.st1.etape1.controller.PanierController;
 import org.iae.annecy.st1.etape1.controller.clientsControler;
 import org.iae.annecy.st1.etape1.model.UserModel;
+import org.iae.annecy.st1.etape1.model.panier.Panier;
 import org.iae.annecy.st1.etape1.model.produit.Catalogue;
 import org.iae.annecy.st1.etape1.model.produit.Produit;
 import org.iae.annecy.st1.etape1.model.person.Clients;
@@ -77,12 +80,13 @@ public class Main {
 		c.ajouterProduit(p1);
 		c.ajouterProduit(p2);
 		Clients clts = new Clients();
+		Panier pan = new Panier();
 		Person pers1 = new Person(1, "MAISSE", "Hugo");
 		clts.ajouterPerson(pers1);
 		//mise en place d'une interface pour responsable produit responsable client et clients
 		Scanner sc2 = new Scanner(System.in);
 		Scanner sc5 = new Scanner(System.in);
-		
+
 		int choixq;
 		do{
 			affichageMenuprincipal();
@@ -90,7 +94,7 @@ public class Main {
 
 			switch(choixusers){
 
-			case  1:
+			case  1: //Menu responsable client
 				try {
 					File file = new File ("clients");
 					ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
@@ -103,7 +107,7 @@ public class Main {
 				affichageresponsableclient();
 				int choixclt = sc5.nextInt();
 				switch(choixclt){
-				case 1 : 
+				case 1 :  //création client
 					try {
 						File file = new File ("clients");
 						ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
@@ -122,41 +126,44 @@ public class Main {
 						ConsoleHelper.display("L'ID est déja utilisé, rentrez une nouvel ID");
 						id = sc3.nextInt();
 					}*/
-					ConsoleHelper.display("Quelle est le nom du client ?");
-					String nom1 = sc3.next();
-					ConsoleHelper.display("Quelle est le prénom du client ?");
-					String prénom = sc3.next();
-					new Person(id, nom1, prénom);
-					clts.ajouterPerson(new Person(id, nom1, prénom));
 
-					try{
-						File file = new File("clients");
-						ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-						oos.writeObject(clts);
-					}catch (IOException ioe){
-						ioe.printStackTrace();
+					if(clts.retrouvePerson(id) != null){
+						ConsoleHelper.display("L'ID est déja utilisé");
+					}else {
+						ConsoleHelper.display("Quelle est le nom du client ?");
+						String nom1 = sc3.next();
+						ConsoleHelper.display("Quelle est le prénom du client ?");
+						String prénom = sc3.next();
+						new Person(id, nom1, prénom);
+						clts.ajouterPerson(new Person(id, nom1, prénom));
+
+
+						try{
+							File file = new File("clients");
+							ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+							oos.writeObject(clts);
+						}catch (IOException ioe){
+							ioe.printStackTrace();
+						}
+						clientsControler clt = new clientsControler(clts);
+						ConsoleHelper.display(clt.get());
 					}
-					clientsControler clt = new clientsControler(clts);
-					ConsoleHelper.display(clt.get());
 					break;
-					
-				case 2 : 
-					
+
+				case 2 : //modification client
+
+
 					ConsoleHelper.display("quel client voulez vous modifier ? (ID)");
 					clientsControler cl = new clientsControler(clts);
 					ConsoleHelper.display(cl.get());
-					/*while(chProd > c.getProduits().size()){
-				System.out.println("erreur veuillez rentrer un article valide dans la liste suivante :");
-				c.afficherList();*/
 					Scanner sc6 = new Scanner(System.in);
 					int chClient = sc6.nextInt();
+					while(chClient > clts.getPersons().size()){
+						ConsoleHelper.display("erreur veuillez rentrer un client valide dans la liste suivante :");
+						c.afficherList();
 
-
-					/*while(!chClient.equals(clts.retrouvePerson(chClient).getId())) {
-						System.out.println("\t\t la reférence est inconnue, rentrez une nouvelle reférence");
-						chProd = sc.next();
-					}*/
-
+						chClient = sc6.nextInt();
+					}
 
 					ConsoleHelper.display("quel attribut changer ?"+  "\n 1=Nom" + "\n 2=Prénom");
 					int chAtts = sc6.nextInt();
@@ -164,24 +171,28 @@ public class Main {
 						ConsoleHelper.display("erreur veuillez rentrer \n 1=Nom" + "\n 2=Prénom");
 						chAtts = sc6.nextInt();
 					}
-					
+
 					switch(chAtts){
 					case 1:
 
-						System.out.println("quelle est le nouveau Nom ?");
+						System.out.println("quel est le nouveau Nom ?");
 						clts.retrouvePerson(chClient).setNom(sc6.next());
 						break;
 					case 2:
 
-						System.out.println("quelle est le nouveau prénom ?");
+						System.out.println("quel est le nouveau prénom ?");
 
 						clts.retrouvePerson(chClient).setPrenom(sc6.next());
 						break;
 					}
-				case 3 :
+					break;
+
+
+				case 3 ://affichage list client
+
 					clientsControler client = new clientsControler(clts);
 					ConsoleHelper.display(client.get());
-				break ;
+					break ;
 				}
 				try{
 					File file = new File("clients");
@@ -191,11 +202,11 @@ public class Main {
 					ioe.printStackTrace();
 				}
 				break;
-				
-				
-				
-				
-				
+
+
+
+
+
 
 
 
@@ -221,9 +232,9 @@ public class Main {
 				final StringView customerAddView = new PersonAddFrenchView();
 
 				ConsoleHelper.display(customerAddView.build(customerAddData));*/
-				
-				
-				
+
+
+
 				//Demande l'ajout d'une personne en une seul fois
 				/*final ConsoleInputView customerCreateView = new PersonCreateFrenchView();
 		customerCreateView.ask(scan);
@@ -233,7 +244,7 @@ public class Main {
 
 		ConsoleHelper.display(customerAddViewBulk.build(customerAddDataBulk));*/
 
-			case 2 :	
+			case 2 :	//Menu Responsable produit
 
 				Scanner sc = new Scanner(System.in);
 				int choixMenu = 0;
@@ -363,7 +374,41 @@ public class Main {
 				}while(choixQuit == 1);
 				break;
 
-			case 3 :
+			case 3 : //menu clients
+				int chajout = 0;
+				Scanner scpanier = new Scanner(System.in);
+				int chco = 0;
+				int qt = 0;
+				int prix=0;
+				int prixtot=0;
+				do{
+					CatalogueControler cat = new CatalogueControler(c);
+					ConsoleHelper.display(cat.get());
+					ConsoleHelper.display("quel produit voulez vous ajouter à votre panier ?");
+					String choixProduitpanier = scpanier.next();
+					pan.ajouterProduitpanier(c.retrouveProduit(choixProduitpanier));
+					ConsoleHelper.display("quelle quantitée ?");
+					qt = scpanier.nextInt();
+					pan.retrouveProduitpanier(choixProduitpanier).setQuant(qt);
+					ConsoleHelper.display("    *******PANIER*******\n");
+					PanierController pan1 = new PanierController(pan);
+					ConsoleHelper.display(pan1.get());
+					
+					prix = (pan.retrouveProduitpanier(choixProduitpanier).getPrix())*qt;
+					prixtot = prixtot +prix;
+					ConsoleHelper.display("ajouter d'autre produit ? (1=OUI/2=NON)");
+					chajout = scpanier.nextInt();
+					
+				}while(chajout == 1);
+				
+				ConsoleHelper.display("prix total du panier : "+ prixtot);
+				ConsoleHelper.display("Voulez vous mettre votre panier en commande ? (1=OUI/2=NON)");
+				chco = scpanier.nextInt();
+				if(chco == 1){
+					ConsoleHelper.display("***Création de la Commande***");
+				}else{
+					ConsoleHelper.display("***Abandon de la commande***");
+				}
 				break;
 			}
 			Scanner sc4 = new Scanner(System.in);

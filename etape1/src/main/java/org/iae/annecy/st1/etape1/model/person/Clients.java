@@ -41,11 +41,11 @@ public class Clients implements java.io.Serializable{
 		while(ite.hasNext()){
 			Person current = ite.next();
 			if(current.getId().equals(ids)){
-				pers = current;
-				break;
+				return current;
+				
 			}
 					
 		}
-		return pers;
+		return null;
 	}
 }
