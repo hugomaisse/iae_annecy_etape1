@@ -22,7 +22,7 @@ public class Person extends AbstractDataView implements Serializable {
 		this.nom = nom;
 		this.prenom = prenom;
 	}
-	
+
 	public Person(DataView datas){
 		this.id = Integer.parseInt(datas.getData("id"));
 		this.prenom = datas.getData("prenom");
@@ -34,7 +34,7 @@ public class Person extends AbstractDataView implements Serializable {
 		datas.add("id", id.toString());
 		datas.add("nom", nom);
 		datas.add("prenom", prenom);
-		
+
 		return datas;
 	}
 

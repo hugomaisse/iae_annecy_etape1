@@ -10,12 +10,12 @@ public class Produit implements Serializable {
 	private String nom;
 	private String descLong;
 	private int quant ;
-	private int px;
 
-	
 
-	
-	
+
+
+
+
 	public String getDescLong() {
 		return descLong;
 	}
@@ -52,12 +52,12 @@ public class Produit implements Serializable {
 		this.desc= des;
 		this.descLong= descL;
 		this.prix= px;
-		
+
 	}
 	public Produit(){
-		
+
 	}
-	
+
 	public String afficherProd(){
 		String t = "";
 		t += ("\n ***" + this.getNom() +"***" + " \n ref: "  + this.getRef() + "\n description courte: " + this.getDesc() + "\n description longue: " + this.getDescLong() + "\n de prix : "+ this.getPrix());
@@ -74,9 +74,5 @@ public class Produit implements Serializable {
 	public void setQuant(int quant) {
 		this.quant = quant;
 	}
-	public void prixTot(){
-		for( int i=0; i< quant ;i++){
-			px = (this.getPrix()*this.getQuant()); 
-		}
-	}
+	
 }

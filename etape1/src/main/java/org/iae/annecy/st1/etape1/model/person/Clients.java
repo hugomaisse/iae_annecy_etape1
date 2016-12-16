@@ -3,8 +3,6 @@ package org.iae.annecy.st1.etape1.model.person;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.iae.annecy.st1.etape1.model.produit.Produit;
-
 
 
 public class Clients implements java.io.Serializable{
