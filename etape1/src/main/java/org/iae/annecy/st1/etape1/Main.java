@@ -69,9 +69,9 @@ public class Main {
 		Panier pan = new Panier();
 		Person pers1 = new Person(1, "MAISSE", "Hugo");
 		clts.ajouterPerson(pers1);
+		
 		// mise en place d'une interface pour responsable produit responsable
 		// client et clients
-		
 		
 
 		int choixq;
@@ -366,7 +366,7 @@ public class Main {
 				break;
 			}
 			
-			ConsoleHelper.display("voulez-vous revenir au menu choix responsable ? (1=oui/2=non)");
+			ConsoleHelper.display("voulez-vous revenir au ***Menu USER*** ? (1=oui/2=non)");
 			choixq = sc.nextInt();
 			while (choixq != 1 && choixq != 2) {
 				ConsoleHelper.display("erreur veuillez rentrer (1=oui/2=non)");
