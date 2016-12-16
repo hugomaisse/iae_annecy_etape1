@@ -13,4 +13,7 @@ public class PanierController {
 	return pan.afficherListpanier();
 		
 	}
+	public void panierClient(){
+		
+	}
 }

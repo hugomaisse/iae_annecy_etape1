@@ -14,7 +14,7 @@ import org.iae.annecy.st1.common.mvc.StringView;
 import org.iae.annecy.st1.etape1.controller.CatalogueControler;
 import org.iae.annecy.st1.etape1.controller.MainController;
 import org.iae.annecy.st1.etape1.controller.PanierController;
-import org.iae.annecy.st1.etape1.controller.clientsControler;
+import org.iae.annecy.st1.etape1.controller.ClientsControler;
 import org.iae.annecy.st1.etape1.model.UserModel;
 import org.iae.annecy.st1.etape1.model.panier.Panier;
 import org.iae.annecy.st1.etape1.model.person.Clients;
@@ -50,7 +50,7 @@ public class Main {
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	
+
 	public static void main(final String[] args) throws IOException, ClassNotFoundException {
 		initUserModel();
 		initCustomerModel();
@@ -69,10 +69,10 @@ public class Main {
 		Panier pan = new Panier();
 		Person pers1 = new Person(1, "MAISSE", "Hugo");
 		clts.ajouterPerson(pers1);
-		
+
 		// mise en place d'une interface pour responsable produit responsable
 		// client et clients
-		
+
 
 		int choixq;
 		do {
@@ -94,7 +94,7 @@ public class Main {
 				affichageresponsableclient();
 				int choixClt = sc.nextInt();
 				switch (choixClt) {
-				
+
 				case 1: // création client
 					try {
 						File file = new File("clients");
@@ -106,7 +106,7 @@ public class Main {
 						clts.ajouterPerson(pers1);
 					}
 
-					
+
 					ConsoleHelper.display("Quelle est l'ID du client ?");
 					int id = sc.nextInt();
 					/*
@@ -133,7 +133,7 @@ public class Main {
 						} catch (IOException ioe) {
 							ioe.printStackTrace();
 						}
-						clientsControler clt = new clientsControler(clts);
+						ClientsControler clt = new ClientsControler(clts);
 						ConsoleHelper.display(clt.get());
 					}
 					break;
@@ -141,9 +141,8 @@ public class Main {
 				case 2: // modification client
 
 					ConsoleHelper.display("quel client voulez vous modifier ? (ID)");//id = 1,2,3 ...
-					clientsControler cl = new clientsControler(clts);
+					ClientsControler cl = new ClientsControler(clts);
 					ConsoleHelper.display(cl.get());
-					
 					int chClient = sc.nextInt();
 					while (chClient > clts.getPersons().size()) {
 						ConsoleHelper.display("erreur veuillez rentrer un client valide dans la liste suivante :");
@@ -175,7 +174,7 @@ public class Main {
 
 				case 3:// affichage list client
 
-					clientsControler client = new clientsControler(clts);
+					ClientsControler client = new ClientsControler(clts);
 					ConsoleHelper.display(client.get());
 					break;
 				}
@@ -191,7 +190,7 @@ public class Main {
 
 			case 2: // Menu Responsable produit
 
-				
+
 				int choixMenu = 0;
 				int choixQuit = 0;
 				String chProd = null;
@@ -219,11 +218,11 @@ public class Main {
 						ConsoleHelper.display("quel produit voulez vous modifier ? (référence produit)");
 						CatalogueControler cat = new CatalogueControler(c);
 						ConsoleHelper.display(cat.get());
-						
+
 						chProd = sc.next();
 
 						while (!chProd.equals(c.retrouveProduit(chProd).getRef())) {
-							ConsoleHelper.display("\t\t la reférence est inconnue, rentrez une nouvelle reférence");
+							ConsoleHelper.display("la reférence est inconnue, rentrez une nouvelle reférence");
 							chProd = sc.next();
 						}
 
@@ -262,22 +261,22 @@ public class Main {
 						ConsoleHelper.display(cat.get());
 
 					} else {//choix ajouter un produit
-						
+
 						ConsoleHelper.display("Quelle est le nom du produit ?");
 						String nom = sc.next();
-						ConsoleHelper.display("\t\t Quelle est la reférence ?");
+						ConsoleHelper.display("Quelle est la reférence ?");
 						String ref = sc.next();
 						while (ref.equals(c.retrouveProduit(ref).getRef())) {
 							ConsoleHelper
-							.display("\t\t la reférence est déja utilisée, rentrez une nouvelle reférence");
+							.display("la reférence est déja utilisée, rentrez une nouvelle reférence");
 							ref = sc.next();
 						}
-						ConsoleHelper.display("\t\t Quelle est la description courte ?");
+						ConsoleHelper.display("Quelle est la description courte ?");
 						String desc = sc.nextLine();
 						sc.nextLine();
-						ConsoleHelper.display("\t\t Quelle est la description longue ?");
+						ConsoleHelper.display("Quelle est la description longue ?");
 						String descLong = sc.nextLine();
-						ConsoleHelper.display("\t\t Quelle est le prix ?");
+						ConsoleHelper.display("Quelle est le prix ?");
 						int prix = sc.nextInt();
 						while (prix <= 0) {
 							ConsoleHelper.display("Le prix est négatif !");
@@ -320,6 +319,7 @@ public class Main {
 				double prixPromo = 0;
 				double prixCal = 0;
 				double px = 0;
+				double prixCaltot = 0;
 
 				do {
 					CatalogueControler cat = new CatalogueControler(c);
@@ -330,34 +330,49 @@ public class Main {
 					ConsoleHelper.display("quelle quantitée ?");
 					qt = sc.nextInt();
 					pan.retrouveProduitpanier(choixProduitpanier).setQuant(qt);
-					ConsoleHelper.display("    *******PANIER*******\n");
+					ConsoleHelper.display("    *******PANIER*******");
 					PanierController pan1 = new PanierController(pan);
 					ConsoleHelper.display(pan1.get());
+					
 
 					prix = (pan.retrouveProduitpanier(choixProduitpanier).getPrix()) * qt;
 					prixTot = prixTot + prix;
+					ConsoleHelper.display("prix total du panier : " + prixTot);
 					ConsoleHelper.display("ajouter d'autre produit ? (1=OUI/2=NON)");
 					chaJout = sc.nextInt();
 
 				} while (chaJout == 1);
 				ConsoleHelper.display("avez-vous un code promo ? 1=OUI/2=NON");
 				code1 = sc.nextInt();
+				while (code1 != 1 && code1 != 2) {
+					ConsoleHelper.display("erreur veuillez rentrer (1=oui/2=non)");
+					code1 = sc.nextInt();
+				}
 				switch (code1) {
 				case 1:
 					ConsoleHelper.display("quelle est votre pourcentage de promotion ?");
 					pourcent = sc.nextInt();
+					while(pourcent < 0 || pourcent > 100){
+						ConsoleHelper.display("le pourcentage n'est pas valide, nouveaux pourcentage ?");
+						pourcent = sc.nextInt();
+					}
 					px = pourcent;
 					prixCal = (px / 100);
-					prixPromo = prixTot * prixCal;
-					ConsoleHelper.display("prix total du panier  avec promo : " + prixPromo);
+					prixPromo = prixTot*prixCal;
+					prixCaltot = prixTot-prixPromo;
+					ConsoleHelper.display("prix total du panier  avec promo : " + prixCaltot);
 					break;
 				case 2:
-					ConsoleHelper.display("prix total du panier : " + prixTot);
+					ConsoleHelper.display("prix total du panier : " +prixTot);
 					break;
 				}
-				
+
 				ConsoleHelper.display("Voulez vous mettre votre panier en commande ? (1=OUI/2=NON)");
 				chCo = sc.nextInt();
+				while (chCo != 1 && chCo != 2) {
+					ConsoleHelper.display("erreur veuillez rentrer (1=oui/2=non)");
+					chCo = sc.nextInt();
+				}
 				if (chCo == 1) {
 					ConsoleHelper.display("***Création de la Commande***");
 				} else {
@@ -365,7 +380,7 @@ public class Main {
 				}
 				break;
 			}
-			
+
 			ConsoleHelper.display("voulez-vous revenir au ***Menu USER*** ? (1=oui/2=non)");
 			choixq = sc.nextInt();
 			while (choixq != 1 && choixq != 2) {

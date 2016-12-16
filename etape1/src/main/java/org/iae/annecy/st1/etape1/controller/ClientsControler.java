@@ -2,12 +2,12 @@ package org.iae.annecy.st1.etape1.controller;
 
 import org.iae.annecy.st1.etape1.model.person.Clients;
 
-public class clientsControler {
+public class ClientsControler {
 Clients clt;
 	
 
 
-	public clientsControler (Clients clts){
+	public ClientsControler (Clients clts){
 		this.clt = clts;
 	}
 	

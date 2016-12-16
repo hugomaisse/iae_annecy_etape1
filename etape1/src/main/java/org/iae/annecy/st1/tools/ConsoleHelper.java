@@ -1,7 +1,3 @@
-/**
- * 
- */
-
 package org.iae.annecy.st1.tools;
 
 import java.util.Scanner;
