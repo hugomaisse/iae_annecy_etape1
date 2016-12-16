@@ -1,7 +1,3 @@
-/**
- * 
- */
-
 package org.iae.annecy.st1.etape1;
 
 import java.io.File;
@@ -32,8 +28,15 @@ import org.iae.annecy.st1.tools.ConsoleHelper;
 
 public class Main {
 
-	
+	static Scanner sc = new Scanner(System.in);
 	private static MainController mainController;
+	private static ObjectInputStream ois;
+	private static ObjectOutputStream oos;
+	private static ObjectOutputStream oos2;
+	private static ObjectInputStream ois2;
+	private static ObjectOutputStream oos3;
+
+
 
 	static {
 		Main.mainController = new MainController();
@@ -47,7 +50,7 @@ public class Main {
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	@SuppressWarnings("resource")
+	
 	public static void main(final String[] args) throws IOException, ClassNotFoundException {
 		initUserModel();
 		initCustomerModel();
@@ -68,20 +71,20 @@ public class Main {
 		clts.ajouterPerson(pers1);
 		// mise en place d'une interface pour responsable produit responsable
 		// client et clients
-		Scanner sc2 = new Scanner(System.in);
-		Scanner sc5 = new Scanner(System.in);
+		
+		
 
 		int choixq;
 		do {
 			affichageMenuprincipal();
-			int choixusers = sc2.nextInt();
+			int choixusers = sc.nextInt();
 
 			switch (choixusers) {
 
 			case 1: // Menu responsable client
 				try {
 					File file = new File("clients");
-					ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+					ois = new ObjectInputStream(new FileInputStream(file));
 					clts = (Clients) ois.readObject();
 
 				} catch (FileNotFoundException e) {
@@ -89,12 +92,13 @@ public class Main {
 					clts.ajouterPerson(pers1);
 				}
 				affichageresponsableclient();
-				int choixclt = sc5.nextInt();
-				switch (choixclt) {
+				int choixClt = sc.nextInt();
+				switch (choixClt) {
+				
 				case 1: // création client
 					try {
 						File file = new File("clients");
-						ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+						ois = new ObjectInputStream(new FileInputStream(file));
 						clts = (Clients) ois.readObject();
 
 					} catch (FileNotFoundException e) {
@@ -102,9 +106,9 @@ public class Main {
 						clts.ajouterPerson(pers1);
 					}
 
-					Scanner sc3 = new Scanner(System.in);
+					
 					ConsoleHelper.display("Quelle est l'ID du client ?");
-					int id = sc3.nextInt();
+					int id = sc.nextInt();
 					/*
 					 * while(id == (clts.retrouvePerson(id).getId())){
 					 * ConsoleHelper.
@@ -116,15 +120,15 @@ public class Main {
 						ConsoleHelper.display("L'ID est déja utilisé");
 					} else {
 						ConsoleHelper.display("Quelle est le nom du client ?");
-						String nom1 = sc3.next();
+						String nom1 = sc.next();
 						ConsoleHelper.display("Quelle est le prénom du client ?");
-						String prénom = sc3.next();
-						new Person(id, nom1, prénom);
-						clts.ajouterPerson(new Person(id, nom1, prénom));
+						String prenom = sc.next();
+						new Person(id, nom1, prenom);
+						clts.ajouterPerson(new Person(id, nom1, prenom));
 
 						try {
 							File file = new File("clients");
-							ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+							oos = new ObjectOutputStream(new FileOutputStream(file));
 							oos.writeObject(clts);
 						} catch (IOException ioe) {
 							ioe.printStackTrace();
@@ -136,36 +140,35 @@ public class Main {
 
 				case 2: // modification client
 
-					ConsoleHelper.display("quel client voulez vous modifier ? (ID)");
+					ConsoleHelper.display("quel client voulez vous modifier ? (ID)");//id = 1,2,3 ...
 					clientsControler cl = new clientsControler(clts);
 					ConsoleHelper.display(cl.get());
-					Scanner sc6 = new Scanner(System.in);
-					int chClient = sc6.nextInt();
+					
+					int chClient = sc.nextInt();
 					while (chClient > clts.getPersons().size()) {
 						ConsoleHelper.display("erreur veuillez rentrer un client valide dans la liste suivante :");
 						c.afficherList();
-
-						chClient = sc6.nextInt();
+						chClient = sc.nextInt();
 					}
 
 					ConsoleHelper.display("quel attribut changer ?" + "\n 1=Nom" + "\n 2=Prénom");
-					int chAtts = sc6.nextInt();
+					int chAtts = sc.nextInt();
 					while (chAtts != 1 && chAtts != 2) {
 						ConsoleHelper.display("erreur veuillez rentrer \n 1=Nom" + "\n 2=Prénom");
-						chAtts = sc6.nextInt();
+						chAtts = sc.nextInt();
 					}
 
-					switch (chAtts) {
+					switch (chAtts) {//choix des attributs a modifier
 					case 1:
 
 						ConsoleHelper.display("quel est le nouveau Nom ?");
-						clts.retrouvePerson(chClient).setNom(sc6.next());
+						clts.retrouvePerson(chClient).setNom(sc.next());
 						break;
 					case 2:
 
 						ConsoleHelper.display("quel est le nouveau prénom ?");
 
-						clts.retrouvePerson(chClient).setPrenom(sc6.next());
+						clts.retrouvePerson(chClient).setPrenom(sc.next());
 						break;
 					}
 					break;
@@ -178,66 +181,25 @@ public class Main {
 				}
 				try {
 					File file = new File("clients");
-					ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-					oos.writeObject(clts);
+					oos2 = new ObjectOutputStream(new FileOutputStream(file));
+					oos2.writeObject(clts);
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
 				}
 				break;
 
-				// get a Person
-				/*
-				 * DataParam searchPersonParam = new BasicDataParam();
-				 * searchPersonParam.add("id", "12"); //0-5 inconu, 5-10 TEST, >10
-				 * DERUETTE final DataView customerData =
-				 * mainController.get("person:get", searchPersonParam); final
-				 * StringView customerGetView = new PersonGetFrenchView();
-				 * 
-				 * ConsoleHelper.display(customerGetView.build(customerData));
-				 */
-
-				// demande l'ajout d'une personne attribut/attribut
-				/*
-				 * DataParam newCustomer = new BasicDataParam(); String personId =
-				 * ConsoleHelper.read(scan, "Quel est l'ID du client ?");
-				 * newCustomer.add("id", personId); // <100 = OK, sinon KO String
-				 * personNom = ConsoleHelper.read(scan,
-				 * "Quel est le nom du client ?"); newCustomer.add("nom",
-				 * personNom); String personPrenom = ConsoleHelper.read(scan,
-				 * "Quel est le prénom du client ?"); newCustomer.add("prenom",
-				 * personPrenom);
-				 * 
-				 * final DataView customerAddData = mainController.get("person:add",
-				 * newCustomer); final StringView customerAddView = new
-				 * PersonAddFrenchView();
-				 * 
-				 * ConsoleHelper.display(customerAddView.build(customerAddData));
-				 */
-
-				// Demande l'ajout d'une personne en une seul fois
-				/*
-				 * final ConsoleInputView customerCreateView = new
-				 * PersonCreateFrenchView(); customerCreateView.ask(scan);
-				 * 
-				 * final DataView customerAddDataBulk =
-				 * mainController.get("person:add", newCustomer); final StringView
-				 * customerAddViewBulk = new PersonAddFrenchView();
-				 * 
-				 * ConsoleHelper.display(customerAddViewBulk.build(
-				 * customerAddDataBulk));
-				 */
 
 			case 2: // Menu Responsable produit
 
-				Scanner sc = new Scanner(System.in);
+				
 				int choixMenu = 0;
 				int choixQuit = 0;
 				String chProd = null;
 
 				try {
 					File fichier = new File("catalogue");
-					ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fichier));
-					c = (Catalogue) ois.readObject();
+					ois2 = new ObjectInputStream(new FileInputStream(fichier));
+					c = (Catalogue) ois2.readObject();
 
 				} catch (FileNotFoundException e) {
 					c = new Catalogue();
@@ -252,18 +214,12 @@ public class Main {
 						ConsoleHelper.display("erreur veuillez rentrer (1=modif/2=Afficher/3=ajouter)");
 						choixMenu = sc.nextInt();
 					}
-					if (choixMenu == 1) {
+					if (choixMenu == 1) {//modification d'un produit
 
 						ConsoleHelper.display("quel produit voulez vous modifier ? (référence produit)");
 						CatalogueControler cat = new CatalogueControler(c);
 						ConsoleHelper.display(cat.get());
-						// c.afficherList();
-						// chProd = sc.next();
-						/*
-						 * while(chProd > c.getProduits().size()){ System.out.
-						 * println("erreur veuillez rentrer un article valide dans la liste suivante :"
-						 * ); c.afficherList();
-						 */
+						
 						chProd = sc.next();
 
 						while (!chProd.equals(c.retrouveProduit(chProd).getRef())) {
@@ -301,31 +257,31 @@ public class Main {
 							c.retrouveProduit(chProd).setNom(sc.next());
 						}
 
-					} else if (choixMenu == 2) {
+					} else if (choixMenu == 2) {//choix afficher liste
 						CatalogueControler cat = new CatalogueControler(c);
 						ConsoleHelper.display(cat.get());
 
-					} else {
-						Scanner sc1 = new Scanner(System.in);
+					} else {//choix ajouter un produit
+						
 						ConsoleHelper.display("Quelle est le nom du produit ?");
-						String nom = sc1.next();
+						String nom = sc.next();
 						ConsoleHelper.display("\t\t Quelle est la reférence ?");
-						String ref = sc1.next();
+						String ref = sc.next();
 						while (ref.equals(c.retrouveProduit(ref).getRef())) {
 							ConsoleHelper
 							.display("\t\t la reférence est déja utilisée, rentrez une nouvelle reférence");
-							ref = sc1.next();
+							ref = sc.next();
 						}
 						ConsoleHelper.display("\t\t Quelle est la description courte ?");
-						String desc = sc1.nextLine();
-						sc1.nextLine();
+						String desc = sc.nextLine();
+						sc.nextLine();
 						ConsoleHelper.display("\t\t Quelle est la description longue ?");
-						String descLong = sc1.nextLine();
+						String descLong = sc.nextLine();
 						ConsoleHelper.display("\t\t Quelle est le prix ?");
-						int prix = sc1.nextInt();
+						int prix = sc.nextInt();
 						while (prix <= 0) {
 							ConsoleHelper.display("Le prix est négatif !");
-							prix = sc1.nextInt();
+							prix = sc.nextInt();
 						}
 						new Produit(nom, ref, desc, descLong, prix);
 						c.ajouterProduit(new Produit(nom, ref, desc, descLong, prix));
@@ -339,8 +295,8 @@ public class Main {
 
 					try {
 						File fichier = new File("catalogue");
-						ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fichier));
-						oos.writeObject(c);
+						oos3 = new ObjectOutputStream(new FileOutputStream(fichier));
+						oos3.writeObject(c);
 					} catch (IOException ioe) {
 						ioe.printStackTrace();
 					}
@@ -350,12 +306,11 @@ public class Main {
 						choixQuit = sc.nextInt();
 					}
 
-				} while (choixQuit == 1);
+				} while (choixQuit == 1);//quite l'appli
 				break;
 
 			case 3: // menu clients
-				int chajout = 0;
-				Scanner scpanier = new Scanner(System.in);
+				int chaJout = 0;
 				int chCo = 0;
 				int qt = 0;
 				int prix = 0;
@@ -370,10 +325,10 @@ public class Main {
 					CatalogueControler cat = new CatalogueControler(c);
 					ConsoleHelper.display(cat.get());
 					ConsoleHelper.display("quel produit voulez vous ajouter à votre panier ?");
-					String choixProduitpanier = scpanier.next();
+					String choixProduitpanier = sc.next();
 					pan.ajouterProduitpanier(c.retrouveProduit(choixProduitpanier));
 					ConsoleHelper.display("quelle quantitée ?");
-					qt = scpanier.nextInt();
+					qt = sc.nextInt();
 					pan.retrouveProduitpanier(choixProduitpanier).setQuant(qt);
 					ConsoleHelper.display("    *******PANIER*******\n");
 					PanierController pan1 = new PanierController(pan);
@@ -382,27 +337,27 @@ public class Main {
 					prix = (pan.retrouveProduitpanier(choixProduitpanier).getPrix()) * qt;
 					prixTot = prixTot + prix;
 					ConsoleHelper.display("ajouter d'autre produit ? (1=OUI/2=NON)");
-					chajout = scpanier.nextInt();
+					chaJout = sc.nextInt();
 
-				} while (chajout == 1);
+				} while (chaJout == 1);
 				ConsoleHelper.display("avez-vous un code promo ? 1=OUI/2=NON");
-				code1 = scpanier.nextInt();
+				code1 = sc.nextInt();
 				switch (code1) {
 				case 1:
 					ConsoleHelper.display("quelle est votre pourcentage de promotion ?");
-					pourcent = scpanier.nextInt();
+					pourcent = sc.nextInt();
 					px = pourcent;
 					prixCal = (px / 100);
 					prixPromo = prixTot * prixCal;
-					ConsoleHelper.display("prix total du panier : " + prixPromo);
+					ConsoleHelper.display("prix total du panier  avec promo : " + prixPromo);
 					break;
 				case 2:
 					ConsoleHelper.display("prix total du panier : " + prixTot);
 					break;
 				}
-				// ConsoleHelper.display("prix total du panier : "+ prixtot);
+				
 				ConsoleHelper.display("Voulez vous mettre votre panier en commande ? (1=OUI/2=NON)");
-				chCo = scpanier.nextInt();
+				chCo = sc.nextInt();
 				if (chCo == 1) {
 					ConsoleHelper.display("***Création de la Commande***");
 				} else {
@@ -410,12 +365,12 @@ public class Main {
 				}
 				break;
 			}
-			Scanner sc4 = new Scanner(System.in);
+			
 			ConsoleHelper.display("voulez-vous revenir au menu choix responsable ? (1=oui/2=non)");
-			choixq = sc4.nextInt();
+			choixq = sc.nextInt();
 			while (choixq != 1 && choixq != 2) {
 				ConsoleHelper.display("erreur veuillez rentrer (1=oui/2=non)");
-				choixq = sc4.nextInt();
+				choixq = sc.nextInt();
 			}
 		} while (choixq == 1);
 	}

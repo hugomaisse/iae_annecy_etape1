@@ -13,7 +13,7 @@ package org.iae.annecy.st1.common.mvc;
 public interface Model {
 
 	/**
-	 * Recherche et récupère les données lié à ce modele.
+	 * Recherche et récupère les données lié à ce model.
 	 * 
 	 * @return Une represnetation des données géré par ce modèle.
 	 */

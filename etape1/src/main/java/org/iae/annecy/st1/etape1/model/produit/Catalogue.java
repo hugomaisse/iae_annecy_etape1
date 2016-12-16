@@ -7,7 +7,7 @@ public class Catalogue implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
 
 	private ArrayList<Produit> produits = new ArrayList<Produit>();
-	
+
 
 	public ArrayList<Produit> getProduits() {
 		return produits;
@@ -18,18 +18,18 @@ public class Catalogue implements java.io.Serializable{
 	}
 
 	public void ajouterProduit(Produit p){
-	this.produits.add(p);
+		this.produits.add(p);
 	}
-	
+
 	public String afficherList(){
 		String t = "";
 		for (Produit produit : produits) {
 			t += produit.afficherProd();
 		}
 		return t;
-	
+
 	}
-	
+
 	public Produit retrouveProduit(String reference){
 		Iterator<Produit> it = this.getProduits().iterator();
 		Produit prod = new Produit();
@@ -39,9 +39,9 @@ public class Catalogue implements java.io.Serializable{
 				prod = current;
 				break;
 			}
-					
+
 		}
-			
+
 		return prod;
 	}
 
